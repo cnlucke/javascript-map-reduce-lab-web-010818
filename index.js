@@ -9000,3 +9000,46 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+const issuesWithUpdatedApiUrl = issues.map(function(issue, index){
+  return Object.assign({}, issue, { "url": (issue["url"].replace("api", "api-v2")) })
+})
+
+const commentCountAcrossIssues = issues.reduce(function(total, issue) {
+  return total += issue.comments_count }, 0);
+
+const openIssues = issues.filter(function(issue) { return issue.state === "open" })
+
+const nonAutomaticIssues = issues.filter(function(issue) { return !issue.body.includes("learn.co") })
+
+const htmlRows = nonAutomaticIssues.map(function(issue) {
+  return `<tr><td>${issue.body}</td><td>${issue.created_at}</td><td>${issue.state}</td></tr>`
+})
+function generate_table_rows() {
+  // get the reference for the tbody
+  const tbody = document.getElementsByTagName("tbody")[0];
+  // creating all cells
+  for (let i = 0; i < nonAutomaticIssues.length; i++) {
+    // creates a table row
+    const row = document.createElement("tr");
+
+    const cell1 = document.createElement("td");
+    cell1.innerHTML = nonAutomaticIssues[i].body
+    row.appendChild(cell1);
+
+    // DATE CELL
+    const cell2 = document.createElement("td");
+    cell2.innerHTML = nonAutomaticIssues[i].created_at
+    row.appendChild(cell2);
+
+    // STATE CELL
+    const cell3 = document.createElement("td");
+    cell3.innerHTML = nonAutomaticIssues[i].state
+    row.appendChild(cell3);
+
+    // add the row to the end of the table body
+    tbody.appendChild(row);
+  }
+}
+
+generate_table_rows();
